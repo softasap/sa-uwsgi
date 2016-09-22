@@ -1,0 +1,10 @@
+---
+# tasks file for sa-uwsgi
+
+  - include: __detect_init_system.yml
+    when: upstart_system is not defined
+
+  - include: tasks_python.yml
+    when: option_install_python
+
+  - include: tasks_uwsgi.yml

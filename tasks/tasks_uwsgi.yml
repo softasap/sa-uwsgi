@@ -1,0 +1,66 @@
+---
+
+  - name: UWSGI | Install dependencies
+    apt: pkg="{{item}}" state="present"
+    with_items:
+      - "python-dev"
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | pip install UWSGI
+    pip: name=uwsgi
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | Create configuration directories
+    file: path=/etc/foo.conf owner=foo group=foo mode=0644
+    with_items:
+      - "/etc/uwsgi/apps-available"
+      - "/etc/uwsgi/apps-enabled"
+      - "/etc/uwsgi/vassals"
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | template emperor.ini
+    template: src="{{role_dir}}/templates/emperor.ini.j2" dest="/etc/uwsgi/emperor.ini"
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | upstart via supervisord
+    template: src="{{role_dir}}/templates/uwsgi_supervisord.conf.j2" dest="/etc/supervisor/conf.d/uwsgi.conf"
+    when: upstart_system = 'supervisord'
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | upstart via supervisord - start service
+    service: name="supervisor" enabled="yes" restarted="yes"
+    when: (docker_test is not defined) and (upstart_system = 'supervisord')
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | upstart via systemd
+    template: src="{{role_dir}}/templates/uwsgi_systemd.service.j2" dest="/etc/systemd/system/uwsgi.service"
+    when: upstart_system = 'systemd'
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | upstart via systemd - start service
+    service: name="uwsgi" enabled="yes" started="yes"
+    when: (docker_test is not defined) and (upstart_system = 'systemd')
+    become: yes
+    tags:
+      - uwsgi
+
+  - name: UWSGI | upstart via upstart - start service
+    template: src="{{role_dir}}/templates/uwsgi_upstart.conf.j2" dest="/etc/init/uwsgi.conf"
+    when: (docker_test is not defined) and (upstart_system = 'upstart')
+    become: yes
+    tags:
+      - uwsgi

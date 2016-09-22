@@ -1,0 +1,13 @@
+[program:uwsgi]
+command=/usr/local/bin/uwsgi /etc/uwsgi/emperor.ini
+user=root
+numprocs=1
+umask=022
+stdout_logfile=/var/log/supervisor/%(program_name)s.log
+stdout_logfile_maxbytes=500MB
+stderr_logfile=/var/log/supervisor/%(program_name)s.error.log
+stderr_logfile_maxbytes=500MB
+autorestart=true
+autostart=true
+startsecs=0
+stopwaitsecs=60
