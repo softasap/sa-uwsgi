@@ -15,7 +15,7 @@
       - uwsgi
 
   - name: UWSGI | Create configuration directories
-    file: path=/etc/foo.conf owner=foo group=foo mode=0644
+    file: path="{{item}}" state=directory
     with_items:
       - "/etc/uwsgi/apps-available"
       - "/etc/uwsgi/apps-enabled"
