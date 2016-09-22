@@ -32,35 +32,35 @@
 
   - name: UWSGI | upstart via supervisord
     template: src="{{role_dir}}/templates/uwsgi_supervisord.conf.j2" dest="/etc/supervisor/conf.d/uwsgi.conf"
-    when: upstart_system = 'supervisord'
+    when: upstart_system == 'supervisord'
     become: yes
     tags:
       - uwsgi
 
   - name: UWSGI | upstart via supervisord - start service
     service: name="supervisor" enabled="yes" restarted="yes"
-    when: (docker_test is not defined) and (upstart_system = 'supervisord')
+    when: (docker_test is not defined) and (upstart_system == 'supervisord')
     become: yes
     tags:
       - uwsgi
 
   - name: UWSGI | upstart via systemd
     template: src="{{role_dir}}/templates/uwsgi_systemd.service.j2" dest="/etc/systemd/system/uwsgi.service"
-    when: upstart_system = 'systemd'
+    when: upstart_system == 'systemd'
     become: yes
     tags:
       - uwsgi
 
   - name: UWSGI | upstart via systemd - start service
     service: name="uwsgi" enabled="yes" started="yes"
-    when: (docker_test is not defined) and (upstart_system = 'systemd')
+    when: (docker_test is not defined) and (upstart_system == 'systemd')
     become: yes
     tags:
       - uwsgi
 
   - name: UWSGI | upstart via upstart - start service
     template: src="{{role_dir}}/templates/uwsgi_upstart.conf.j2" dest="/etc/init/uwsgi.conf"
-    when: (docker_test is not defined) and (upstart_system = 'upstart')
+    when: (docker_test is not defined) and (upstart_system == 'upstart')
     become: yes
     tags:
       - uwsgi
