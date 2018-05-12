@@ -27,7 +27,8 @@ Advanced:
         role: "sa-uwsgi",
         option_install_python: true,
         option_install_python3: true,
-        uwsgi_pip:  pip3  # install uwsgi using provided pip path
+        uwsgi_pip:  pip3  # install uwsgi using provided pip path,
+        python_version: "3.6.4"
 
       }
 ```
