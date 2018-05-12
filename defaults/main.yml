@@ -1,4 +1,8 @@
 ---
 # defaults file for sa-uwsgi
   role_dir: "{{ role_path }}"
-  option_install_python: true
+  option_install_python: false
+  option_install_python3: false
+  python_version: "3.6.4"  # python 3 version
+
+  # uwsgi_pip:  pip3

@@ -9,7 +9,7 @@
       - uwsgi
 
   - name: UWSGI | pip install UWSGI
-    pip: name=uwsgi
+    pip: name=uwsgi executable="{{uwsgi_pip | default(omit)}}"
     become: yes
     tags:
       - uwsgi
